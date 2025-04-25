@@ -6,11 +6,12 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 import Common.*;
-import Server.OyenteServidor;
 
 import java.util.Scanner;
 
 public class Cliente {
+
+    private Usuario datos_cliente;
     private Socket socket;
     private ObjectOutputStream salida;
     private ObjectInputStream entrada;
@@ -27,14 +28,14 @@ public class Cliente {
         try {
             Scanner scanner = new Scanner(System.in);
 
-            // Paso 1: Enviar mensaje de conexión al servidor
+            // Enviar mensaje de conexión al servidor
             ccout.print("Introduce el nombre de tu equipo: ");
-            String nombreEquipo = scanner.nextLine();
-            ccout.print("Introduce los puntos de habilidad de tu equipo: ");
-            int puntos = scanner.nextInt();
-            scanner.nextLine(); // Limpiar el buffer
+            String nombre = scanner.nextLine();
 
-            Thread hiloCliente = new Thread(new OyenteCliente(socket, ccout));
+            this.datos_cliente = new Usuario(nombre);
+
+
+            Thread hiloCliente = new Thread(new OyenteServidor(socket,datos_cliente, ccout));
             hiloCliente.start();
 
             Boolean salir = false;
@@ -86,7 +87,8 @@ public class Cliente {
         System.out.println("------------------ MENÚ PRINCIPAL -------------------");
         System.out.println("1. Consultar la información disponible");
         System.out.println("2. Descargar la información deseada");
-        System.out.println("3. Salir del sistema");
+        System.out.println("3. Modificar Listas");
+        System.out.println("4. Salir del sistema");
         System.out.println("-----------------------------------------------------");
     }
 

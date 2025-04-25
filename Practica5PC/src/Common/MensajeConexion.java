@@ -1,20 +1,13 @@
 package Common;
 
 public class MensajeConexion extends Mensaje {
-    private String nombreEquipo;
-    private int puntos;
+    private String nombre;
 
-    public MensajeConexion(String nombreEquipo, int puntos) {
+    public MensajeConexion(String nombreEquipo) {
         super("CONEXION");
-        this.nombreEquipo = nombreEquipo;
-        this.puntos = puntos;
+        this.nombre = nombreEquipo;
     }
 
-    public String getNombreEquipo() {
-        return nombreEquipo;
-    }
+    public String getNombre() { return nombre; }
 
-    public int getPuntos() {
-        return puntos;
-    }
 }
