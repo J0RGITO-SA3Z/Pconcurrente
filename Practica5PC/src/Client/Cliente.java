@@ -20,6 +20,7 @@ public class Cliente {
     public Cliente(String host, int puerto) throws IOException {
         this.socket = new Socket(host, puerto);
         this.salida = new ObjectOutputStream(socket.getOutputStream());
+        this.salida.flush();
         this.entrada = new ObjectInputStream(socket.getInputStream());
         this.ccout = new ConcurrentConsole();
     }
@@ -28,14 +29,18 @@ public class Cliente {
         try {
             Scanner scanner = new Scanner(System.in);
 
-            // Enviar mensaje de conexión al servidor
-            ccout.print("Introduce el nombre de tu equipo: ");
+            ccout.print("Introduce tu nombre de usuario: ");
             String nombre = scanner.nextLine();
-
             this.datos_cliente = new Usuario(nombre);
 
+            // Enviar solicitud de conexión
+            MensajeConexion mensajeConexion = new MensajeConexion(datos_cliente.getNombre());
+            salida.writeObject(mensajeConexion);
+            salida.flush();
+            ccout.print("Conexión enviada al servidor.");
 
-            Thread hiloCliente = new Thread(new OyenteServidor(socket,datos_cliente, ccout));
+
+            Thread hiloCliente = new Thread(new OyenteServidor(socket,datos_cliente, ccout,salida,entrada));
             hiloCliente.start();
 
             Boolean salir = false;
@@ -45,27 +50,15 @@ public class Cliente {
                 String opcion = scanner.nextLine();
                 switch (opcion) {
                     case "1":
-                       /* MensajeListaUsuarios lista = new MensajeListaUsuarios();
-                        salida.writeObject(mensajeConexion);
-
-                        Mensaje mensaje = (Mensaje) entrada.readObject();
-                        MensajeListaUsuarios listaUsuarios = (MensajeListaUsuarios) mensaje;
-                        ccout.print("Usuarios disponibles:");
-                        for (String usuario : listaUsuarios.getNombresEquipos()) {
-                            System.out.println("- " + usuario);
-                        }
-                        break;
-*/
+                        opcion_solicitarListas();
                         break;
                     case "2":
-                        //MensajeConexion mensajeConexion = new MensajeConexion(nombreEquipo, puntos);
-                        //salida.writeObject(mensajeConexion);
-                        //Mensaje mensaje = (Mensaje) entrada.readObject();
-
-
-
+                        opcion_descargar();
                         break;
                     case "3":
+                        opcion_ModificarListas();
+                        break;
+                    case "4":
                         salir = true;
                         System.out.println("Sesión cerrada. ¡Hasta luego!");
                         break;
@@ -88,7 +81,7 @@ public class Cliente {
         System.out.println("1. Consultar la información disponible");
         System.out.println("2. Descargar la información deseada");
         System.out.println("3. Modificar Listas");
-        System.out.println("4. Salir del sistema");
+        System.out.println("4. Salir");
         System.out.println("-----------------------------------------------------");
     }
 
@@ -101,6 +94,21 @@ public class Cliente {
             e.printStackTrace();
         }
     }
+
+    private void opcion_solicitarListas(){
+
+    }
+
+    private void opcion_descargar(){
+
+    }
+
+    private void opcion_ModificarListas(){
+
+    }
+
+
+
 
     public static void main(String[] args) {
         try {

@@ -1,15 +1,15 @@
 package Common;
 
 public class MensajeConfConexion extends Mensaje {
-    private String nombreEquipo;
+    private String nombre;
 
     public MensajeConfConexion(String nombreEquipo) {
         super("CONFIRMACION_CONEXION");
-        this.nombreEquipo = nombreEquipo;
+        this.nombre = nombreEquipo;
     }
 
     public String getNombreEquipo() {
-        return nombreEquipo;
+        return nombre;
     }
 
 }
